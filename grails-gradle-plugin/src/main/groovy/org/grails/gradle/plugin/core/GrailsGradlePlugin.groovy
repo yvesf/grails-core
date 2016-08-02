@@ -232,6 +232,14 @@ class GrailsGradlePlugin extends GroovyPlugin {
                 }
             }
         }
+        // create a generic runCommand command that can start other commands that are not known to gradle
+        project.tasks.create('runCommand', ApplicationContextCommandTask) {
+            classpath = project.sourceSets.main.runtimeClasspath + project.configurations.console
+            command = 'run-command'
+            if (project.hasProperty('args')) {
+                args(CommandLineParser.translateCommandline(project.args))
+            }
+        }
     }
 
     protected void configureGrailsSourceDirs(Project project) {
